@@ -10305,7 +10305,8 @@ end)
 
 addcmd("explorer", {"dex"}, function(args, speaker)
     notify("Loading", "Hold on a sec")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+    --loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/HoangHienXScripts/Scripts/refs/heads/modified/InfiniteYield/DexExplorer.luau"))()
 end)
 
 addcmd('olddex', {'odex'}, function(args, speaker)
@@ -10392,7 +10393,8 @@ addcmd('remotespy',{'rspy'},function(args, speaker)
 	notify("Loading",'Hold on a sec')
 	-- Full credit to exx, creator of SimpleSpy
 	-- also thanks to Amity for fixing
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/SimpleSpyV3/main.lua"))()
+	--loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/SimpleSpyV3/main.lua"))()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/HoangHienXScripts/Scripts/refs/heads/modified/InfiniteYield/RemoteEvents_SPY.luau"))()
 end)
 
 addcmd('audiologger',{'alogger'},function(args, speaker)
@@ -13067,6 +13069,8 @@ task.spawn(function()
 	end
 end)
 
+execCmd('hideiy')
+
 task.spawn(function()
 	wait()
 	Credits:TweenPosition(UDim2.new(0, 0, 0.9, 0), "Out", "Quart", 0.2)
@@ -13081,5 +13085,7 @@ task.spawn(function()
 	Credits:Destroy()
 	IntroBackground:Destroy()
 	minimizeHolder()
-	if IsOnMobile then notify("Unstable Device", "On mobile, Infinite Yield may have issues or features that are not functioning correctly.") end
+	--if IsOnMobile then
+            --notify("Unstable Device", "On mobile, Infinite Yield may have issues or features that are not functioning correctly.")
+        --end
 end)
