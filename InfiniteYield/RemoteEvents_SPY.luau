@@ -1,15 +1,5 @@
---[[ Modified ]]--
---[[
-    SimpleSpy v2.2 SOURCE
+-- RSPY From Owner: exx from iy --
 
-    SimpleSpy is a lightweight penetration testing tool that logs remote calls.
-
-    Credits:
-        exx - basically everything
-        Frosty - GUI to Lua
-]]
-
--- shuts down the previous instance of SimpleSpy
 if _G.SimpleSpyExecuted and type(_G.SimpleSpyShutdown) == "function" then
 	print(pcall(_G.SimpleSpyShutdown))
 end
@@ -20,10 +10,6 @@ local Highlight =
 	loadstring(
 		game:HttpGet("https://raw.githubusercontent.com/HoangHienXScripts/Scripts/refs/heads/modified/InfiniteYield/A/RSPY_SyntaxHighlighted.luau")
 	)()
-
----- GENERATED (kinda sorta mostly) BY GUI to LUA ----
-
--- Instances:
 
 local SimpleSpy2 = Instance.new("ScreenGui")
 local Background = Instance.new("Frame")
@@ -316,8 +302,7 @@ TextLabel.TextWrapped = true
 TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 TextLabel.TextYAlignment = Enum.TextYAlignment.Top
 
--------------------------------------------------------------------------------
--- init
+-- Init --
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -381,7 +366,6 @@ local rightFadeIn
 local codebox
 local p
 local getnilrequired = false
-local _InLoopMode_42 = false
 
 -- autoblock variables
 local autoblock = false
@@ -2085,15 +2069,6 @@ function toggleSpyMethod()
 	toggle = not toggle
 end
 
---- 2 Notify
-function _Notify(msg)
-         game:GetService("StarterGui"):SetCore("SendNotification", {
-		Title = "Remote Spy",
-		Text = msg,
-		Duration = 2,
-         })
-end
-
 --- Shuts down the remote spy
 function shutdown()
 	if schedulerconnect then
@@ -2278,16 +2253,7 @@ end, function()
 	local orText = "Click to execute code"
 	TextLabel.Text = "Executing..."
 	local succeeded = pcall(function()
-		if not _InLoopMode_42 then
-		    return loadstring(codebox:getString())()
-		    print("[RSPY]: Loop Not Enabled")
-		else
-		    print("[RSPY]: Loop Enabled")
-		end
-		while _InLoopMode_42 then
-			wait(0.5)
-			return loadstring(codebox:getString())()
-		end
+		return loadstring(codebox:getString())()
 	end)
 	if succeeded then
 		TextLabel.Text = "Executed successfully!"
@@ -2295,19 +2261,6 @@ end, function()
 		TextLabel.Text = "Execution error!"
 	end
 end)
-
--- Switch between multiple run or single run
-newButton("Loops", function()
-	return "Click to change loop run code or maybe not"
-end, function()
-	if not _InLoopMode_42 then
-            _InLoopMode_42 = true
-	    _Notify("[RSPY]: Loop Executing Is Enabled")
-	else
-            _InLoopMode_42 = false
-	    _Notify("[RSPY]: Loop Executing Is Disabled")
-        end
-end
 
 --- Gets the calling script (not super reliable but w/e)
 newButton("Get Script", function()
