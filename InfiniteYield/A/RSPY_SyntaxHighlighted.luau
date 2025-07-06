@@ -1,36 +1,14 @@
---[[ UnModified ]]--
---[[
-    higlight.lua v0.0.1 by exxtremewa#9394
-    
-    Features:
-     - uses the power of fancy syntax detection algorithms to convert a frame into a syntax highlighted high quality code box
-     - is cool
-]]
+-- higlight.lua v0.0.1 by exxtremewa#9394 --
+-- Rewrited/Clean by HHxScripts 4 Fun --
 
 local TextService = game:GetService("TextService")
 local RunService = game:GetService("RunService")
---- The Highlight class
---- @class Highlight
 local Highlight = {}
-
--- PRIVATE METHODS/PROPERTIES --
-
---[[
-    Char Object:
-    {
-        Char: string -- A single character
-        Color: Color3 -- The intended color of the char
-        Line: number -- The line number
-    }
-]]
-
 local parentFrame
 local scrollingFrame
 local textFrame
 local lineNumbersFrame
 local lines = {}
-
---- Contents of the table- array of char objects
 local tableContents = {}
 
 local line = 0
@@ -53,7 +31,6 @@ local lineNumberColor = commentColor
 local genericColor = Color3.fromRGB(240, 240, 240)
 
 local operators = {"^(function)[^%w_]", "^(local)[^%w_]", "^(if)[^%w_]", "^(for)[^%w_]", "^(while)[^%w_]", "^(then)[^%w_]", "^(do)[^%w_]", "^(else)[^%w_]", "^(elseif)[^%w_]", "^(return)[^%w_]", "^(end)[^%w_]", "^(continue)[^%w_]", "^(and)[^%w_]", "^(not)[^%w_]", "^(or)[^%w_]", "[^%w_](or)[^%w_]", "[^%w_](and)[^%w_]", "[^%w_](not)[^%w_]", "[^%w_](continue)[^%w_]", "[^%w_](function)[^%w_]", "[^%w_](local)[^%w_]", "[^%w_](if)[^%w_]", "[^%w_](for)[^%w_]", "[^%w_](while)[^%w_]", "[^%w_](then)[^%w_]", "[^%w_](do)[^%w_]", "[^%w_](else)[^%w_]", "[^%w_](elseif)[^%w_]", "[^%w_](return)[^%w_]", "[^%w_](end)[^%w_]"}
---- In this case, patterns could not be used, so just the string characters are provided
 local strings = {{"\"", "\""}, {"'", "'"}, {"%[%[", "%]%]", true}}
 local comments = {"%-%-%[%[[^%]%]]+%]?%]?", "(%-%-[^\n]+)"}
 local functions = {"[^%w_]([%a_][%a%d_]*)%s*%(", "^([%a_][%a%d_]*)%s*%(", "[:%.%(%[%p]([%a_][%a%d_]*)%s*%("}
@@ -63,7 +40,6 @@ local objects = {"[^%w_:]([%a_][%a%d_]*):", "^([%a_][%a%d_]*):"}
 local other = {"[^_%s%w=>~<%-%+%*]", ">", "~", "<", "%-", "%+", "=", "%*"}
 local offLimits = {}
 
---- Determines if index is in a string
 function isOffLimits(index)
     for _, v in pairs(offLimits) do
         if index >= v[1] and index <= v[2] then
@@ -73,21 +49,6 @@ function isOffLimits(index)
     return false
 end
 
---- Find iterator
--- function gfind(str, pattern)
---     local start = 0
---     return function()
---         local findStart, findEnd = str:find(pattern, start)
---         if findStart and findEnd ~= #str then
---             start = findEnd + 1
---             return findStart, findEnd
---         else
---             return nil
---         end
---     end
--- end
-
---- Find iterator
 function gfind(str, pattern)
     return coroutine.wrap(function()
         local start = 0
@@ -103,7 +64,6 @@ function gfind(str, pattern)
     end)
 end
 
---- Finds and highlights comments with `commentColor`
 function renderComments()
     local str = Highlight:getRaw()
     local step = 1
@@ -125,7 +85,6 @@ function renderComments()
     end
 end
 
--- Finds and highlights strings with `stringColor`
 function renderStrings()
     local stringType
     local stringEndType
@@ -167,9 +126,6 @@ function renderStrings()
     end
 end
 
---- Highlights the specified patterns with the specified color
---- @param patternArray string[]
----@param color userdata
 function highlightPattern(patternArray, color)
     local str = Highlight:getRaw()
     local step = 1
@@ -190,8 +146,6 @@ function highlightPattern(patternArray, color)
     end
 end
 
---- Automatically replaces reserved chars with escape chars
---- @param s string
 function autoEscape(s)
     for i = 0, #s do
         local char = string.sub(s, i, i)
@@ -212,15 +166,9 @@ function autoEscape(s)
             i += 4
         end
     end
-    -- s:gsub("<", "&lt;")
-    -- s:gsub(">", "&gt;")
-    -- s:gsub('"', "&quot;")
-    -- s:gsub("'", "&apos;")
-    -- s:gsub("&", "&amp;")
     return s
 end
 
---- Main function for syntax highlighting tableContents
 function render()
     offLimits = {}
     lines = {}
@@ -303,45 +251,6 @@ function render()
             end
             rawStr = rawStr .. char.Char
         end
-
-        -- local v = tableContents[i]
-        -- if not lines[v.Line] or #lines[v.Line] <= 200 then
-        --     local textBox = Instance.new("TextLabel")
-        --     local size = TextService:GetTextSize(v.Char, 14, Enum.Font.Arial, Vector2.new(math.huge, math.huge))
-        --     local lineSizeX = 0
-        --     if not lines[v.Line] then
-        --         lines[v.Line] = {}
-        --     end
-        --     if v.Char == "\n" then
-        --         textBox.Text = ""
-        --         game:GetService("RunService").Heartbeat:Wait()
-        --     elseif v.Char:match("\t") then
-        --         v.Char = "\t____"
-        --         textBox.Text = "\t____"
-        --         textBox.TextTransparency = 1
-        --     elseif v.Char:match(" ") then
-        --         v.Char = " |"
-        --         textBox.Text = " -"
-        --         textBox.TextTransparency = 1
-        --     else
-        --         textBox.Text = v.Char
-        --     end
-        --     if not lines[v.Line] then
-        --         lines[v.Line] = {}
-        --     end
-        --     for _, c in pairs(lines[v.Line]) do
-        --         lineSizeX = lineSizeX + TextService:GetTextSize(c.Char, 14, Enum.Font.Arial, Vector2.new(math.huge, math.huge)).X
-        --     end
-        --     textBox.TextColor3 = v.Color
-        --     textBox.Size = UDim2.new(0, size.X, 0, size.Y)
-        --     textBox.TextXAlignment = Enum.TextXAlignment.Left
-        --     textBox.TextYAlignment = Enum.TextYAlignment.Top
-        --     textBox.Position = UDim2.new(0, lineSizeX, 0, v.Line * lineSpace - lineSpace / 2)
-        --     textBox.BackgroundTransparency = 1
-        --     v.TextBox = textBox
-        --     table.insert(lines[v.Line], v)
-        --     textBox.Parent = textFrame
-        -- end
     end
     updateZIndex()
     updateCanvasSize()
@@ -353,7 +262,6 @@ function onFrameSizeChange()
 end
 
 function updateCanvasSize()
-    -- local codeSize = Vector2.new(TextService:GetTextSize(Highlight:getRaw(), textSize, font, Vector2.new(math.huge, math.huge)).X + 60, #lines * lineSpace + 60)
     scrollingFrame.CanvasSize = UDim2.new(0, largestX, 0, line * lineSpace)
 end
 
@@ -365,10 +273,6 @@ function updateZIndex()
     end
 end
 
--- PUBLIC METHODS --
-
---- Runs when a new object is instantiated
---- @param frame userdata
 function Highlight:init(frame)
     if typeof(frame) == "Instance" and frame:IsA("Frame") then
         frame:ClearAllChildren()
@@ -406,8 +310,6 @@ function Highlight:init(frame)
     end
 end
 
---- Sets the raw text of the code box (\n = new line, \t converted to spaces)
---- @param raw string
 function Highlight:setRaw(raw)
     raw = raw .. "\n"
     tableContents = {}
@@ -421,15 +323,10 @@ function Highlight:setRaw(raw)
         if i % 1000 == 0 then
             RunService.Heartbeat:Wait()
         end
-        -- if raw:sub(i, i) == "\n" then
-        --     line = line + 1
-        -- end
     end
     render()
 end
 
---- Returns the (string) raw text of the code box (\n = new line). This includes placeholder characters so it should only be used internally.
---- @return string
 function Highlight:getRaw()
     local result = ""
     for _, char in pairs(tableContents) do
@@ -438,8 +335,6 @@ function Highlight:getRaw()
     return result
 end
 
---- Returns the (string) text of the code box (\n = new line)
---- @return string
 function Highlight:getString()
     local result = ""
     for _, char in pairs(tableContents) do
@@ -448,21 +343,14 @@ function Highlight:getString()
     return result
 end
 
---- Returns the (char[]) array that holds all the lines in order as strings
---- @return table[]
 function Highlight:getTable()
     return tableContents
 end
 
---- Returns the (int) number of lines in the code box
---- @return number
 function Highlight:getSize()
     return #tableContents
 end
 
---- Returns the (string) line of the specified line number
---- @param line number
---- @return string
 function Highlight:getLine(line)
     local currentline = 0
     local rightLine = false
@@ -481,9 +369,6 @@ function Highlight:getLine(line)
     return result
 end
 
---- Replaces the specified line number with the specified string (\n will overwrite further lines)
---- @param line number
----@param text string
 function Highlight:setLine(line, text)
     if #tableContents and line >= tableContents[#tableContents].Line then
         for i = tableContents[#tableContents].Line, line do
@@ -514,9 +399,6 @@ function Highlight:setLine(line, text)
     error("Unable to set line")
 end
 
---- Inserts a line made from the specified string and moves all existing lines down (\n will insert further lines)
---- @param line number
----@param text string
 function Highlight:insertLine(line, text)
     if #tableContents and line >= tableContents[#tableContents].Line then
         Highlight:setLine(line, text)
@@ -537,10 +419,7 @@ function Highlight:insertLine(line, text)
     error("Unable to insert line")
 end
 
--- CONSTRUCTOR --
-
 local constructor = {}
---- responsible for instantiation
 function constructor.new(...)
     local class = Highlight
     local new = {}
