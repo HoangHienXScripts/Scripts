@@ -18,7 +18,7 @@ function _notify(title, text, duration)
     })
 end
 
-_module.ClickTarget = function(_target, _delay, _clicktype, _release) -- Target phai la mot phan, vi du: workspace.part
+_module.ClickTarget = function(_target, _delay, _solanthu, _clicktype, _release) -- Target phai la mot phan, vi du: workspace.part
     local point, onscreen = _camera:WorldToScreenPoint(_target.Position)
     if onscreen then
         local screenposition = Vector2.new(point.X, point.Y)
@@ -30,14 +30,18 @@ _module.ClickTarget = function(_target, _delay, _clicktype, _release) -- Target 
             end
         elseif _clicktype == 2 then
             mousemoverel(screenposition.X, screenposition.Y)
-            mouse1press()
-            if _release == true then
-                task.wait(_delay)
-                mouse1release()
+            _notify("《Moved Mouse》", "Mouse Has Touched " .. _target.Name .. " Position!")
+            for _index = 1, _solanthu do
+                mouse1click()
             end
+            --mouse1press()
+            --if _release == true then
+            --    task.wait(_delay)
+            --    mouse1release()
+            --end
         end
     else
-        _notify("《Click Target》", _target.Name .. " Is Not OnScreen, Can't Send Event!", 1)
+        _notify("《Mouse Clicked》", _target.Name .. " Is Not OnScreen, Can't Click!", 1)
     end
 end
 
