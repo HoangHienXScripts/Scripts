@@ -27,7 +27,7 @@ _module.ClickTarget = function(_target, _delay, _clicktype) -- Target phai la mo
             task.wait(_delay)
             _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, false, game, 1)
         elseif _clicktype == 2 then
-            mousemove(screenposition.X, screenposition.Y)
+            mousemoverel(screenposition.X, screenposition.Y)
             mouse1press()
             task.wait(_delay)
             mouse1release()
