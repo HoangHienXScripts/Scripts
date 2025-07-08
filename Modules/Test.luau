@@ -18,19 +18,23 @@ function _notify(title, text, duration)
     })
 end
 
-_module.ClickTarget = function(_target, _delay, _clicktype) -- Target phai la mot phan, vi du: workspace.part
+_module.ClickTarget = function(_target, _delay, _clicktype, _release) -- Target phai la mot phan, vi du: workspace.part
     local point, onscreen = _camera:WorldToScreenPoint(_target.Position)
     if onscreen then
         local screenposition = Vector2.new(point.X, point.Y)
         if _clicktype == 1 then
             _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, true, game, 1)
-            task.wait(_delay)
-            _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, false, game, 1)
+            if _release == true then
+                task.wait(_delay)
+                _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, false, game, 1)
+            end
         elseif _clicktype == 2 then
             mousemoverel(screenposition.X, screenposition.Y)
             mouse1press()
-            task.wait(_delay)
-            mouse1release()
+            if _release == true then
+                task.wait(_delay)
+                mouse1release()
+            end
         end
     else
         _notify("《Click Target》", _target.Name .. " Is Not OnScreen, Can't Send Event!", 1)
