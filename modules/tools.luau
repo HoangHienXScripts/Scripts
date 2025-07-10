@@ -26,31 +26,26 @@ _module.ClickTarget = function(_target, _mode, _release, _processfinishedpoint, 
         local screenposition = Vector2.new(point.X, point.Y)
         if _processpoint >= _processfinishedpoint then _processpoint = 0 end
         repeat wait(_delay)
-            print(_mode)
-            if typeof(_mode) == 'number' then
-                _mode = tonumber(_mode) or 1
-                print(_mode)
-                if not _mode >= 3 then _vim:SendMouseMoveEvent(screenposition.X, screenposition.Y, game) end
-                if _mode == 1 then
-                    _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, true, game, 1)
+            if _mode < 3 then _vim:SendMouseMoveEvent(screenposition.X, screenposition.Y, game) end
+            if _mode == 1 then
+                _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, true, game, 1)
+                if _release == true then
+                    task.wait(_delay)
+                    _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, false, game, 1)
+                end
+            elseif _mode == 2 then
+                _vu:CaptureController()
+                _vu:ClickButton1(Vector2.new(0, 0))
+            elseif _mode == 3 then
+                if mouse1press and mouse1release and mousemoverel then
+                    mousemoverel(screenposition.X, screenposition.Y)
+                    mouse1press()
                     if _release == true then
-                        task.wait(_delay)
-                        _vim:SendMouseButtonEvent(screenposition.X, screenposition.Y, 0, false, game, 1)
+                        wait(_delay)
+                        mouse1release()
                     end
-                elseif _mode == 2 then
-                    _vu:CaptureController()
-                    _vu:ClickButton1(Vector2.new(0, 0))
-                elseif _mode == 3 then
-                    if mouse1press and mouse1release and mousemoverel then
-                        mousemoverel(screenposition.X, screenposition.Y)
-                        mouse1press()
-                        if _release == true then
-                            wait(_delay)
-                            mouse1release()
-                        end
-                    else
-                        return "[ERROR]: Your executor it's not supported, 2 run this function!"
-                    end
+                else
+                    return "[ERROR]: Your executor it's not supported, 2 run this function!"
                 end
             end
             _processpoint += 1
