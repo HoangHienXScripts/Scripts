@@ -1,4 +1,4 @@
--- HHxScripts: fun module... --
+-- HHxScripts: fun module...
 local _ws = game:GetService("Workspace")
 local _plrs = game:GetService("Players")
 local _stg = game:GetService("StarterGui")
@@ -20,11 +20,17 @@ function _notify(title, text, duration)
     })
 end
 
-_module.ClickTarget = function(_target, _mode, _release, _processfinishedpoint, _delay) -- Target phai la mot phan, vi du: workspace.part
+_module.new = function()
+    local self = setmetatable({}, {__index = _module})
+    self._processpoint = 0
+    return self
+end
+
+_module.ClickTarget = function(self, _target, _mode, _release, _processfinishedpoint, _delay)  -- Target phải là một phần, ví dụ: workspace.part
     local point, onscreen = _camera:WorldToScreenPoint(_target.Position)
     if onscreen then
         local screenposition = Vector2.new(point.X, point.Y)
-        if _processpoint >= _processfinishedpoint then _processpoint = 0 end
+        if self._processpoint >= _processfinishedpoint then self._processpoint = 0 end
         repeat wait(_delay)
             if _mode < 3 then _vim:SendMouseMoveEvent(screenposition.X, screenposition.Y, game) end
             if _mode == 1 then
@@ -48,21 +54,21 @@ _module.ClickTarget = function(_target, _mode, _release, _processfinishedpoint, 
                     return "[ERROR]: Your executor it's not supported, 2 run this function!"
                 end
             end
-            _processpoint += 1
-        until _processpoint >= _processfinishedpoint or 5
+            self._processpoint += 1
+        until self._processpoint >= _processfinishedpoint or 5
     else
         _notify("[ERROR]: ", _target.Name .. " is not showing on screen, send event failed!", 1)
     end
 end
 
-_module._checktable = function(_t, _time)
+_module._checktable = function(self, _t, _time)
     _time = _time or 0
     print(string.rep(" ", _time) .. "{")
     for a, b in pairs(_t) do
         local _istype = type(b)
         if _istype == "table" then
             print(string.rep(" ", _time + 4) .. a .. " = {")
-            self._checktable(b, _time + 8)
+            self:_checktable(b, _time + 8)
             print(string.rep(" ", _time + 4) .. "}")
         elseif _istype == "function" then
             print(string.rep(" ", _time + 4) .. a .. " = function: " .. tostring(b))
