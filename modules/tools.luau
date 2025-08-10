@@ -55,5 +55,29 @@ _module.ClickTarget = function(_target, _mode, _release, _processfinishedpoint, 
     end
 end
 
+_module._checktable = function(_t, _time)
+    _time = _time or 0
+    print(string.rep(" ", _time) .. "{")
+    for a, b in pairs(_t) do
+        local _istype = type(b)
+        if _istype == "table" then
+            print(string.rep(" ", _time + 4) .. a .. " = {")
+            self._checktable(b, _time + 8)
+            print(string.rep(" ", _time + 4) .. "}")
+        elseif _istype == "function" then
+            print(string.rep(" ", _time + 4) .. a .. " = function: " .. tostring(b))
+        elseif _istype == "boolean" then
+            print(string.rep(" ", _time + 4) .. a .. " = " .. tostring(b))
+        elseif _istype == "number" then
+            print(string.rep(" ", _time + 4) .. a .. " = " .. b)
+        elseif _istype == "string" then
+            print(string.rep(" ", _time + 4) .. a .. " = \"" .. b .. "\"")
+        elseif _istype == "nil" then
+            print(string.rep(" ", _time + 4) .. a .. " = nil")
+        end
+    end
+    print(string.rep(" ", _time) .. "}")
+end
+
 return _module
 -- Perfect END... ---
