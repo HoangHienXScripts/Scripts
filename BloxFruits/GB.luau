@@ -241,6 +241,14 @@ copyfullpath.Text = "Copy Structure"
 copyfullpath.Visible = true
 scriptdata.func.uic(copyfullpath, 0.1)
 
+function makeround_number(num, decimals)
+    if decimals <= 0 then
+        return math.floor(num)
+    end
+    local factor = 10 ^ decimals
+    return math.floor(num * factor) / factor
+end
+
 function default()
     scriptdata.questlevel = "none"
     scriptdata.questname = "none"
@@ -302,7 +310,7 @@ scriptdata.func.mb1c(txtbutton_d, function()
         pos_z = hrp.Position.X
         pos_x = hrp.Position.Y
         pos_c = hrp.Position.Z
-        scriptdata.questnpc = "{" .. tostring(pos_z) .. ", " .. tostring(pos_x) .. ", " .. tostring(pos_z) .. "}"
+        scriptdata.questnpc = "{" .. tostring(pos_z) .. ", " .. tostring(pos_x) .. ", " .. tostring(pos_c) .. "}"
         txt_lb_d.Text = scriptdata.questnpc
     end
 end)
