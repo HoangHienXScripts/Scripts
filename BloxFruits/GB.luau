@@ -15,6 +15,7 @@ local scriptdata, color = {
     questcount = "none",
     fullstructure = "none",
     next_structure = "none",
+    number_x = 0,
     nextpathyet = false,
     buttons_data = {
         default = {
@@ -383,10 +384,11 @@ scriptdata.func.mb1c(copyfullpath, function()
     else
         default()
         scriptdata.next_structure = "none"
+        scriptdata.number_x = 0
     end
 end)
 
-local spx = 0
+local spx = scriptdata.number_x
 scriptdata.func.mb1c(next_path, function()
     if scriptdata.questname ~= "none" and scriptdata.questnum ~= "none" and scriptdata.questnpc ~= "none" and scriptdata.questcount ~= "none" and scriptdata.questwaitpos ~= "none" and scriptdata.questlevel ~= "none" then
         spx += 1 display_a.Text = tostring(spx)
