@@ -16,7 +16,7 @@ local scriptdata, color = {
     fullstructure = "none",
     next_structure = "none",
     number_x = 0,
-    nextpathyet = false,
+    nextpathyet = true,
     buttons_data = {
         default = {
             font = Enum.Font.Code
@@ -393,7 +393,7 @@ scriptdata.func.mb1c(next_path, function()
     if scriptdata.questname ~= "none" and scriptdata.questnum ~= "none" and scriptdata.questnpc ~= "none" and scriptdata.questcount ~= "none" and scriptdata.questwaitpos ~= "none" and scriptdata.questlevel ~= "none" then
         spx += 1 display_a.Text = tostring(spx)
         if scriptdata.next_structure == "none" then
-            if not scriptdata.nextpathyet then scriptdata.nextpathyet = true end
+            if scriptdata.nextpathyet then scriptdata.nextpathyet = false end
             scriptdata.next_structure = '["' .. scriptdata.questlevel .. '"] = {\n        ["QuestName"] = "' .. scriptdata.questname .. '",\n        ["QuestNumber"] = ' .. scriptdata.questnum .. ',\n        ["QuestNPC"] = ' .. scriptdata.questnpc .. ',\n        ["QuestWaitingSpots"] = {\n            ' .. scriptdata.questwaitpos .. '\n        },\n        ["NPC_Count"] = "' .. scriptdata.questcount .. '"\n    }'
         else
             scriptdata.next_structure = scriptdata.next_structure .. ',\n    ["' .. scriptdata.questlevel .. '"] = {\n        ["QuestName"] = "' .. scriptdata.questname .. '",\n        ["QuestNumber"] = ' .. scriptdata.questnum .. ',\n        ["QuestNPC"] = ' .. scriptdata.questnpc .. ',\n        ["QuestWaitingSpots"] = {\n            ' .. scriptdata.questwaitpos .. '\n        },\n        ["NPC_Count"] = "' .. scriptdata.questcount .. '"\n    }'
