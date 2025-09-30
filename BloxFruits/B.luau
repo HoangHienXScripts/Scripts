@@ -146,7 +146,7 @@ return {
     ["275"] = {
         ["QuestName"] = "ColosseumQuest",
         ["QuestNumber"] = 2,
-        ["QuestNPC"] = {-1576.25, 7.43, -1576.25},
+        ["QuestNPC"] = {-1578, 8, -2984},
         ["QuestWaitingSpots"] = {
             Vector3.new(-1454.59, 7.48, -3211.69),
             Vector3.new(-1396.00, 7.42, -3368.97),
