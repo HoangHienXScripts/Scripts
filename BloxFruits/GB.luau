@@ -307,9 +307,9 @@ end)
 scriptdata.func.mb1c(txtbutton_d, function()
     local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
     if hrp then local pos_z, pos_x, pos_c
-        pos_z = hrp.Position.X
-        pos_x = hrp.Position.Y
-        pos_c = hrp.Position.Z
+        pos_z = makeround_number(hrp.Position.X, 2)
+        pos_x = makeround_number(hrp.Position.Y, 2)
+        pos_c = makeround_number(hrp.Position.Z, 2)
         scriptdata.questnpc = "{" .. tostring(pos_z) .. ", " .. tostring(pos_x) .. ", " .. tostring(pos_c) .. "}"
         txt_lb_d.Text = scriptdata.questnpc
     end
@@ -318,9 +318,9 @@ end)
 scriptdata.func.mb1c(txtbutton_e, function()
     local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
     if hrp then local pos_z, pos_x, pos_c
-        pos_z = hrp.Position.X
-        pos_x = hrp.Position.Y
-        pos_c = hrp.Position.Z
+        pos_z = makeround_number(hrp.Position.X, 2)
+        pos_x = makeround_number(hrp.Position.Y, 2)
+        pos_c = makeround_number(hrp.Position.Z, 2)
         if scriptdata.questwaitpos == "none" then scriptdata.questwaitpos = ""
             scriptdata.questwaitpos = scriptdata.questwaitpos .. "Vector3.new(" .. tostring(pos_z) .. ", " .. tostring(pos_x) .. ", " .. tostring(pos_c) .. ")"
         else
