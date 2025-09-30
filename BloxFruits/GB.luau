@@ -14,6 +14,8 @@ local scriptdata, color = {
     questwaitpos = "none",
     questcount = "none",
     fullstructure = "none",
+    next_structure = "none",
+    nextpathyet = false,
     buttons_data = {
         default = {
             font = Enum.Font.Code
@@ -38,7 +40,7 @@ local scriptdata, color = {
 }
 
 local screenui, df, sf, txt_lb_a, txtbox_a, txt_lb_b, txtbox_b, txt_lb_c, txtbox_c, txt_lb_d, txt_lb_e
-local txtbutton_d, txtbutton_e, copyfullpath, level_cap
+local txtbutton_d, txtbutton_e, copyfullpath, level_cap, display_a, next_path
 screenui = Instance.new("ScreenGui", core)
 df = Instance.new("Frame", screenui)
 sf = Instance.new("ScrollingFrame", df)
@@ -54,6 +56,8 @@ txtbutton_d = Instance.new("TextButton", sf)
 txtbutton_e = Instance.new("TextButton", sf)
 copyfullpath = Instance.new("TextButton", sf)
 level_cap = Instance.new("TextBox", sf)
+display_a = Instance.new("TextLabel", sf)
+next_path = Instance.new("TextButton", sf)
 
 screenui.Name = "HHxScript_" .. math.random(1, 9999)
 df.Name = "DragF_X"
@@ -70,6 +74,8 @@ txtbutton_d.Name = "GetPos_D"
 txtbutton_e.Name = "GetPos_E"
 copyfullpath.Name = "GetFinalStructure"
 level_cap.Name = "Input_Extra"
+display_a.Name = "CompleteQuest_Count"
+next_path.Name = "GenerateNext_Path"
 
 df.BackgroundTransparency = 0.5
 df.BackgroundColor3 = color.black
@@ -241,6 +247,30 @@ copyfullpath.Text = "Copy Structure"
 copyfullpath.Visible = true
 scriptdata.func.uic(copyfullpath, 0.1)
 
+display_a.BackgroundTransparency = 0.8
+display_a.BackgroundColor3 = color.black
+display_a.Position = UDim2.new(0.02, 0, 0.622, 0)
+display_a.Size = UDim2.new(0.65, 0, 0.1, 0)
+display_a.TextScaled = true
+display_a.TextSize = 12
+display_a.TextColor3 = color.white
+display_a.Font = Enum.Font[scriptdata.buttons_data.font] or scriptdata.buttons_data.default.font
+display_a.Text = ""
+display_a.Visible = true
+scriptdata.func.uic(display_a, 0.1)
+
+next_path.BackgroundTransparency = 0.8
+next_path.BackgroundColor3 = color.black
+next_path.Position = UDim2.new(0.68, 0, 0.622, 0)
+next_path.Size = UDim2.new(0.30, 0, 0.1, 0)
+next_path.TextScaled = true
+next_path.TextSize = 12
+next_path.TextColor3 = color.white
+next_path.Font = Enum.Font[scriptdata.buttons_data.font] or scriptdata.buttons_data.default.font
+next_path.Text = "Next Line"
+next_path.Visible = true
+scriptdata.func.uic(next_path, 0.1)
+
 function makeround_number(num, decimals)
     if decimals <= 0 then
         return math.floor(num)
@@ -257,6 +287,7 @@ function default()
     scriptdata.questwaitpos = "none"
     scriptdata.questcount = "none"
     scriptdata.fullstructure = "none"
+    --scriptdata.next_structure = "none"
     txt_lb_a.Text = "" txtbox_a.Text = ""
     txt_lb_b.Text = "" txtbox_b.Text = ""
     txt_lb_c.Text = "" txtbox_c.Text = ""
@@ -335,7 +366,11 @@ scriptdata.func.mb1c(copyfullpath, function()
     if scriptdata.fullstructure == "none" then
         scriptdata.fullstructure = ""
         if scriptdata.questname ~= "none" and scriptdata.questnum ~= "none" and scriptdata.questnpc ~= "none" and scriptdata.questcount ~= "none" and scriptdata.questwaitpos ~= "none" and scriptdata.questlevel ~= "none" then
-            scriptdata.fullstructure = '["' .. scriptdata.questlevel .. '"] = {\n        ["QuestName"] = "' .. scriptdata.questname .. '",\n        ["QuestNumber"] = ' .. scriptdata.questnum .. ',\n        ["QuestNPC"] = ' .. scriptdata.questnpc .. ',\n        ["QuestWaitingSpots"] = {\n            ' .. scriptdata.questwaitpos .. '\n        },\n        ["NPC_Count"] = "' .. scriptdata.questcount .. '"\n    }'
+            if scriptdata.nextpathyet then
+                scriptdata.fullstructure = '["' .. scriptdata.questlevel .. '"] = {\n        ["QuestName"] = "' .. scriptdata.questname .. '",\n        ["QuestNumber"] = ' .. scriptdata.questnum .. ',\n        ["QuestNPC"] = ' .. scriptdata.questnpc .. ',\n        ["QuestWaitingSpots"] = {\n            ' .. scriptdata.questwaitpos .. '\n        },\n        ["NPC_Count"] = "' .. scriptdata.questcount .. '"\n    }'
+            else
+                scriptdata.fullstructure = scriptdata.next_structure
+            end
             setclipboard(scriptdata.fullstructure)
         else
             if not unknown then unknown = true
@@ -347,6 +382,20 @@ scriptdata.func.mb1c(copyfullpath, function()
         end
     else
         default()
+        scriptdata.next_structure = "none"
+    end
+end)
+
+local spx = 0
+scriptdata.func.mb1c(next_path, function()
+    if scriptdata.questname ~= "none" and scriptdata.questnum ~= "none" and scriptdata.questnpc ~= "none" and scriptdata.questcount ~= "none" and scriptdata.questwaitpos ~= "none" and scriptdata.questlevel ~= "none" then
+        spx += 1 display_a.Text = tostring(spx)
+        if scriptdata.next_structure == "none" then
+            if not scriptdata.nextpathyet then scriptdata.nextpathyet = true end
+            scriptdata.next_structure = '["' .. scriptdata.questlevel .. '"] = {\n        ["QuestName"] = "' .. scriptdata.questname .. '",\n        ["QuestNumber"] = ' .. scriptdata.questnum .. ',\n        ["QuestNPC"] = ' .. scriptdata.questnpc .. ',\n        ["QuestWaitingSpots"] = {\n            ' .. scriptdata.questwaitpos .. '\n        },\n        ["NPC_Count"] = "' .. scriptdata.questcount .. '"\n    }'
+        else
+            scriptdata.next_structure = scriptdata.next_structure .. ',\n    ["' .. scriptdata.questlevel .. '"] = {\n        ["QuestName"] = "' .. scriptdata.questname .. '",\n        ["QuestNumber"] = ' .. scriptdata.questnum .. ',\n        ["QuestNPC"] = ' .. scriptdata.questnpc .. ',\n        ["QuestWaitingSpots"] = {\n            ' .. scriptdata.questwaitpos .. '\n        },\n        ["NPC_Count"] = "' .. scriptdata.questcount .. '"\n    }'
+        end default()
     end
 end)
 
