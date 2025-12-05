@@ -63,6 +63,6 @@ end
 
 rs.RenderStepped:Connect(function()
     if checking_realslap(rplr_onvision().Name) then
-        combat:FireServer(memories.remote_args.dodge)
+        combat:FireServer(unpack(memories.remote_args.dodge))
     end
 end)
