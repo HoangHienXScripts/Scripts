@@ -3,7 +3,12 @@ local core, starterui
 core = game:GetService("CoreGui")
 sterui = game:GetService("StarterGui")
 
+if core:FindFirstChild("HHxScripts_SGUI") then core.HHxScripts_SGUI:Destroy() 
+  print("Previous 'ScreenGui' Loaded, Has been removed.")
+end
+
 local main, screenui = {}, Instance.new("ScreenGui", core)
+screenui.Name = "HHxScripts_SGUI"
 
 function adduicorner(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end
 function do_notify(str) sterui:SetCore("SendNotification", {Title = "MODULE NOTIFY", Text = str, Duration = 1.25,}) end
@@ -29,6 +34,28 @@ main.add_button = function(keys, fname, tcolor, pos, crner, script)
   new_btn.Visible = true
   adduicorner(new_btn, crner)
   new_btn.MouseButton1Click:Connect(script)
+  return new_btn
+end
+
+main.add_toggle = function(keys, fname, tcolor, pos, crner, script)
+  local new_btn = Instance.new("TextButton", screenui)
+  new_btn.Name = randomstrs()
+  new_btn.BackgroundTransparency = 0.5
+  new_btn.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  new_btn.Position = UDim2.new(unpack(pos))
+  new_btn.Size = UDim2.new(0.05, 0, 0.1, 0)
+  new_btn.TextScaled = true
+  new_btn.TextSize = 12
+  new_btn.TextColor3 = Color3.fromRGB(unpack(tcolor))
+  new_btn.Text = keys
+  new_btn.Font = Enum.Font[fname]
+  new_btn.Visible = true
+  adduicorner(new_btn, crner)
+  local var = false
+  new_btn.MouseButton1Click:Connect(function()
+    if not var then var = true else var = false end
+    while var do wait(0.01) script() end
+  end)
   return new_btn
 end
 
