@@ -1,7 +1,8 @@
 -- buttons --
-local core, starterui
+local core, starterui, htp
 core = game:GetService("CoreGui")
 sterui = game:GetService("StarterGui")
+htp = game:GetService("HttpService")
 
 if core:FindFirstChild("HHxScripts_SGUI") then core.HHxScripts_SGUI:Destroy() 
   print("Previous 'ScreenGui' Loaded, Has been removed.")
@@ -9,7 +10,7 @@ end
 
 local main, screenui = {}, Instance.new("ScreenGui", core)
 screenui.Name = "HHxScripts_SGUI"
-
+local folders = {"HHxScripts", "HHxScripts/Games", "HHxScripts/Games/PLACE_" .. tostring(game.GameId) .. "_SAVEFOLDER"}
 local configs = {
   saving_state = false,
   set = false,
@@ -25,10 +26,33 @@ function randomstrs() local keys, newest = "abcdefghy", ""
   end return newest
 end
 
+function createsave_folder()
+  if isfolder and makefolder and isfile and writefile and readfile then
+    for index = 1, #folders do if not isfolder(folders[index]) then makefolder(folders[index]) end
+    if not isfile(folders[3] .. "/QuickButtons.json") then
+      writefile(folders[3] .. "/QuickButtons.json", htp:JSONEncode(configs.buttons))
+    end
+  end
+end
+
+local ppx = 0
+function update_configs()
+  if not configs.set and isfolder(folders[3]) then
+    configs.saving_state = true
+    configs.set = true
+  end if isfile(folders[3] .. "/QuickButtons.json") then
+    configs.buttons = htp:JSONDecode(readfile(folders[3] .. "/QuickButtons.json"))
+    if ppx > 0 then
+      writefile(folders[3] .. "/QuickButtons.json", htp:JSONEncode(configs.buttons))
+    end ppx += 1
+  end
+end update_configs()
+
 main.add_config = function(cfgs)
   if type(cfgs) == "table" then
     for key, val in pairs(cfgs) do if configs[key] ~= nil then configs[key] = val end end
   end configs.set = true
+  if configs.saving_state then createsave_folder() end
 end
 
 main.add_button = function(keys, fname, tcolor, pos, crner, script)
@@ -81,7 +105,7 @@ main.add_toggle = function(keys, fname, tcolor, pos, crner, script, var)
       else btn_state = false
         new_btn.TextColor3 = Color3.fromRGB(unpack(tcolor))
       end
-    end
+    end if configs.set then update_configs() end
   end) while btn_state or configs.buttons[varx] do wait(0.01)
     script()
   end return new_btn
@@ -96,3 +120,4 @@ main.removing_buttons = function()
 end
 
 return main
+-- First time ever make a UI_Library roblox --
