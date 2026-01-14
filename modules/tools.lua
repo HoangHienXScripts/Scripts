@@ -18,7 +18,7 @@ local create_tween = function(t1, t2, up_axis)
     if data.ctws ~= nil then data.ctws:Cancel() end
 	up_axis = up_axis or 0
 	data.ctws = tws:Create(t1, TweenInfo.new((t1.Position - t2.Position).magnitude / 195, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
-			CFrame = CFrame.new(t2.Position + Vector3.new(0, up_axis, 0)
+			CFrame = CFrame.new(t2.Position + Vector3.new(0, up_axis, 0))
 	}) data.ctws:Play()
 end
 
