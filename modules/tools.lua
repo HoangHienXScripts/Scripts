@@ -1,4 +1,3 @@
--- Tools module by HoangHien v0.1 --
 local plrs = game:GetService("Players")
 local tws = game:GetService("TweenService")
 local plr = plrs.LocalPlayer
